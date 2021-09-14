@@ -1,0 +1,165 @@
+python D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\ManageBuildDirectories.py
+
+::GIS ocean shapefiles: https://www.marineregions.org/gazetteer.php?p=details&id=1905
+
+
+::python D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\ClearTempOutputFolders.py
+:: Commented out before saving GIS commands to Python
+
+::python "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\ConvertASCFilesToCSV.py"
+:: Next convert supercedes this one
+
+::R "NCDFOpenTry.R"
+
+python "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\ConvertASCFilesToCSV_2.py"
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "AppendRADS2WindByCountry.do"
+
+::QGIS Clip out the Tanzania Observations which are not over ocean shp
+
+::Manually created shapefile for Tanz. Ocean regions, see Word Doc.
+::D:\Dropbox\Pirates\PaperwithBen\Work\Build\Input\Tanzania\CreatedShape\ShapefileBoundaries.doc
+
+::QGIS Join wind observations to ocean shapes in Tanzania
+::Predicates: contains and within
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\ImportRadarJoinedToOcean_Tanzania.do"
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\ImportTanzaniaConflict.do"
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\CreateDatesForPanel.do"
+
+::Import additional meterological data for over land Somalia-
+::Box: (40.825195 W, 51.41 E), (-1.757537 S, 12.039321 N)
+
+python D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\DownloadCMORPH.py
+
+::R "ProcessCMORPH.R"
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\AggregateCMORPHData.do"
+
+::QGIS Joins Lon Lat Pairs to Each Region
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\MergeCMORPHAggToRegions.do"
+
+python D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\PrepareCPC.py
+
+:: Manually downloaded reanalysis data from: https://downloads.psl.noaa.gov/Datasets/, https://downloads.psl.noaa.gov/Datasets/cpc_global_temp/
+
+::R "ProcessCPC.R"
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\AggregateCPCData.do"
+
+::QGIS joins Lon Lat Pairs to Each Region
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\MergeCMORPHAggToRegions.do"
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\MergePirateWeatherOceanArea.do"
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\MergeWeatherConflictOceanArea_Tanzania.do"
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\RunLabelVariables.do"
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\ImportPiracyDataForAlternativeMappings.do"
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\MergePirateWeatherOceanArea_AltMappings.do"
+
+
+::QGIS Draw separate, custom ocean regions
+::QGIS join pirate attacks and ocean wind readings to new polygons
+
+
+
+::QGIS Bounding box for Med Sea/Libya Wind:
+::Box: (7 E, 37E), (30 N, 39 N)
+
+
+
+::QGIS Bounding box for Atlantic/Indian/S. Africa Wind:
+::Box: (7 E, 41E), (22 S, 42S)
+
+
+
+::Gather data manually from FNSAU for Somalia
+::https://www.fsnau.org/ids/dashboard.php
+::Market data, manually downloaded
+
+
+
+
+
+
+
+
+::python "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\ImportSaveOceanLayer.py"
+::Trying to use Python to run QGIS
+
+::"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\ImportRADSData.do"
+::Superceded by above wind processing
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\MakeJoinedWindSpeedPointstoOceansBackToDta.do"
+
+:QGIS merging Red Sea and Gulf Of Aden
+
+::"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\RemoveOverlandRadarClusters.do"
+: Commented out, because now the process is just joining each individual reading to a specific region
+
+: QGIS Actions which merge ocean polygon to each individual wind observation 
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\ImportPiracyData.do"
+
+:: QGIS Actions that should be coded with own python script, importing piracy actions and setting style
+
+::QGIS manually entered whether each administrative region was coastal and exported the file to merge into conflict, just manually entered in stata too
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\ImportConflictData.do"
+:: Conflict Data Separated and Sent to Greg for classification
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Do\topic_modeling.do"
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\ClassifyTopics.do"
+
+::python "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\ImportChlorophyll.py"
+
+::"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\PrepareChlorophyll.do"
+::Chlorophyll commented out because it takes forever to run
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\MergeWeatherPirateConflict.do"
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\MergeAggregateData.do"
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\PrepMergedData.do"
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+:: Now working towards a first stage with 3 ocean level clusters
+
+::QGIS actions which: join ocean attributes to pirate attacks and radar clusters respectively, geocluster (k=16) the radar passes
+
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\ImportPiracyOceanLevel.do"
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\ImportRadarOceanLevel.do"
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\CreateDatesFor3Oceans.do"
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\PrepareOceanLevelChlorophyll.do"
+
+::QGIS actions which add buffers then do intersection of ocean and buffer conflict to see which are within x miles
+
+::python ""D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\CreateChlorophyllDirectories.py"
+::commented out because clears out data
+
+::python ""D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\DownloadChlorophyllNASA.py"
+::commented out because the data has an expiration date on servers
+
+::R "NCDFOpenTry.R"
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\CreateLatLonJoinForQGIS.do"
+
+::QGIS actions joining coordinates to oceans, need to redo after merging polygons for gulf of aden and arabian sea
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\ReduceSizeOfChloroData.do"
+
+"C:\Users\Benjamin\Desktop\Stata 14\StataMP-64.exe" /e do "D:\Dropbox\Pirates\PaperwithBen\Work\Build\Code\RunLabelVariables.do"
+
+@pause
