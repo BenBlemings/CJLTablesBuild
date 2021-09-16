@@ -1,0 +1,2 @@
+\midrule
+Panel C: PFE with Covariates & & & \\

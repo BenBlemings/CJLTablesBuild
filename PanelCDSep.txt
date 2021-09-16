@@ -1,0 +1,2 @@
+\midrule
+Panel D: With Price Covariates & & & \\

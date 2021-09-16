@@ -1,0 +1,2 @@
+\midrule
+Panel E: Region X Year X Month FE's, Land Covariates & & & \\
